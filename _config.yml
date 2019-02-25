@@ -17,15 +17,14 @@ title: Learning machines
 email: luc.blassel@pasteur.fr
 description: >- # this means to ignore newlines until "baseurl:"
   understanding machine learning and how it works
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "zlanderous.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/home" # the subpath of your site, e.g. /blog
+url: "localhost:4000" # the base hostname & protocol for your site, e.g. http://example.com
 linkedin_username: luc-blassel
 github_username:  zlanderous
 
 # Build settings
 markdown: kramdown
-# theme: jekyll-swiss
-remote_theme: broccolini/swiss
+theme: minima
 theme_color: red
 plugins:
   - jekyll-feed
