@@ -4,3 +4,5 @@
 
 layout: home
 ---
+
+Hi everybody, if you have some feedback do not hesitate to [contact me](mailto:luc.blassel+machine@gmail.com). 
