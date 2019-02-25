@@ -24,9 +24,9 @@ github_username:  zlanderous
 
 # Build settings
 markdown: kramdown
-# theme: jekyll-swiss
-remote_theme: broccolini/swiss
-theme_color: red
+theme: minima
+# remote_theme: broccolini/swiss
+# theme_color: red
 plugins:
   - jekyll-feed
 
