@@ -22,18 +22,17 @@ url: "localhost:4000" # the base hostname & protocol for your site, e.g. http://
 linkedin_username: luc-blassel
 github_username:  zlanderous
 
+show_excerpts: true
+
+disqus:
+  shortname: zlanderous-github-io
+
 # Build settings
 markdown: kramdown
 theme: minima
 theme_color: red
 plugins:
   - jekyll-feed
-
-defaults:
-  - scope:
-      path: "assets/images"
-    value:
-      image: true
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
