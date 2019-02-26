@@ -1,5 +1,6 @@
 ---
 layout: post
+mathjax: true
 title:  "What are decision trees?"
 date:   2019-02-25 19:53:20 +0100
 ---
@@ -37,6 +38,27 @@ Here our dataset is 4 dimensional, however it is a little complicated for use hu
 
 ![the iris dataset]({{site.baseurl}}/assets/images/iris_dataset_base.svg)
 
-If we went all the way to have pure nodes we would get this tree which is overfitted:
+Now let's represent the splits in our decision trees as lines that separate the plane into 2 sub-splanes:  
+For the first split, we can draw a vertical line that shows  $petal\ length = 1.9$ that corresponds to the first split of our tree. As we can see in the figure below that perfectly separates *iris setosa* form the other two:  
 
-![an overfitted tree]({{site.baseurl}}/assets/images/overfitted_tree.svg)
+![the first split]({{site.baseurl}}/assets/images/iris_dataset_split_1.svg)  
+
+Now we can draw our second split, the horizontal line representing $petal\ width = 1.7$. This split only divides the *right* subspace of our first split, this is called [recursive partitioning](https://en.wikipedia.org/wiki/Recursive_partitioning). As you can see below, this separates our two remaining species, *versicolor* and *virginica* fairly well. However, near the boundary of this second split, we can see some of our *versicolor* flowers end un on the *virginica* side and *vice-versa*. 
+
+![the second split]({{site.baseurl}}/assets/images/iris_dataset_split_2.svg)  
+
+*Why don't we keep partitioning until there are no stragglers ?* you might ask. To uderstand that let's take a look at what the tree would look like if we kept splitting the dataset until each subspace was only filled with one species:  
+
+![an overfitted tree]({{site.baseurl}}/assets/images/overfitted_tree.svg)  
+As you can see this tree is a lot bigger and more complicated to take in, and it has splits that are very close to one another like $petal\ length = 4.9$ and $petal\ length = 4.8$ 
+
+![ovrfitted partitioning]({{site.baseurl}}/assets/images/iris_splits_overfit.svg)  
+*(N.b, you might have noticed in middle-top partition there appears to be only a sample of virginica, so why was is separated from the middle-right partition which is also virginica? In reality, because of the low precision of the dataset measurements, there are 2 versicolor and 1 virginica that have the same values for petal length and width, making them indistinguishable in the plane)*  
+
+The decision tree we have here is very specific to our present dataset, it splits as much as possible to **fit** our **training data**, and what it is doing is called **overfitting**. This means that our tree is so specific to the data it was given, that if we get new samples *(ie. petal lengths and widths for new flowers not in the dataset)*, and we cycle them through the tree they might not end up detected as the right species. This is one of the reasons we want to restrict our decision tree to generalize it.  
+
+There are a couple ways to restrict the tree, either by specifying a maximum depth value *(how many splits in a row you can do)*, or a threshold value *(if a split has a species that makes up more than 90% of it's samples we can call it "pure" and stop splitting for examples)* or by **pruning** the tree, meaning we make a decision tree that is av precise as possible, very overfitted, and then, according to a set of rules, we remove the branches and nodes that are too specific.  
+
+## conclusion
+OK so that was a quick introduction to trees, and my goal was to make you understand how a decision tree works, that it is just a set of nested partitions. Here we restricted ourselves to 2-D but it is easy to see how this carries to 3-D, we have a volume instead of a plane, and splits are surfaces instead of lines.  
+Stay tuned for [part 2]() where I will go explain the CART algorithm for building these decision tres and implement it in `Python`.
