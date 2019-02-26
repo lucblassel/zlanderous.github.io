@@ -11,7 +11,7 @@ All right let's get started.
 
 
 # Example data
-We are going to use, as an example, de Fisher Iris dataset (more info [here](https://en.wikipedia.org/wiki/Iris_flower_data_set)) and we are going to build a tree that can separate the different types of irises (classes), which is called a classification tree. 
+We are going to use, as an example, the Fisher Iris dataset (more info [here](https://en.wikipedia.org/wiki/Iris_flower_data_set)) and we are going to build a tree that can separate the different types of irises (classes), which is called a classification tree. 
 
 This dataset is a simple, standard dataset in machine learning and it is easy to understand. 
 There are  150 samples *(ie. different flowers)* of irises, and each of these has 4 features and one label. The features are [petal](https://en.wikipedia.org/wiki/Petal) length and width, as well as [sepal](https://en.wikipedia.org/wiki/Sepal) length and width, all in centimeters. The label of each observation is simply 
@@ -54,7 +54,8 @@ Now we can draw our second split, the horizontal line representing $petal\ width
 ![the second split]({{site.baseurl}}/assets/images/iris_dataset_split_2.svg)
 {:refdef}  
 
-*Why don't we keep partitioning until there are no stragglers ?* you might ask. To uderstand that let's take a look at what the tree would look like if we kept splitting the dataset until each subspace was only filled with one species:  
+*Why don't we keep partitioning until there are no stragglers ?* you might ask.  
+To uderstand that let's take a look at what the tree would look like if we kept splitting the dataset until each subspace was only filled with one species:  
 
 {:refdef: style="text-align: center;"}
 ![an overfitted tree]({{site.baseurl}}/assets/images/overfitted_tree.svg)
