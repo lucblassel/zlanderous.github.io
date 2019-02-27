@@ -4,6 +4,7 @@ title: The CART Algorithm
 date: 2019-02-27 10:00:00 {{site.timezone}}
 mathjax: true
 excerpt_separator: <!--more-->
+tags: [decision-trees, machine-learning]
 ---
 
 This is Part 2. of my decision tree series. Here we will see how we can build a decision tree algorithmically using Leo Breiman's (One of the big, **big** names in decision trees) CART algorithm. 
@@ -206,6 +207,6 @@ This is only a part of the algorithm, it results in a tree that grows until all 
 
 ## Conclusion
 
-I hop you learned something on how to build decision trees, and you can go read [part 3]() to see a `Python` implementation of this algorithm. 
+I hop you learned something on how to build decision trees, stay tuned for [part 3]() to see a `Python` implementation of this algorithm. 
 
 

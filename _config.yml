@@ -31,7 +31,12 @@ disqus:
 # Build settings
 markdown: kramdown
 theme: minima
-# remote_theme: broccolini/swiss
+
+defaults:
+  -
+    values:
+      author: Luc Blassel
+
 
 # theme_color: red
 plugins:
