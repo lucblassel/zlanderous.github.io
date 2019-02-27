@@ -20,7 +20,7 @@ Y \rightarrow target\\
 X_{\{1,\cdots,p\}} \rightarrow explanatory\ features
 $$  
 
-Meaning that the different $X_p$ are the variables in our dataset *(so if we take [part 1]({% post_url 2019-02-26-what-are-decision-trees.markdown %})'s iris dataset they could be $petal\ length$ or $petal\ width$, $\cdots$)* and $Y_i$ is the target value for our example *(the species for our example)*  
+Meaning that the different $X_p$ are the variables in our dataset *(so if we take [part 1]()'s iris dataset they could be $petal\ length$ or $petal\ width$, $\cdots$)* and $Y_i$ is the target value for our example *(the species for our example)*  
 For a classification tree $Y_i \in \{1,2,\cdots,k\}$, where $k$ is the number of possible classes.  
 On the other hand for a regression tree $Y_i \in \mathbb{R}$
 
