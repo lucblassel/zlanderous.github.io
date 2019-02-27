@@ -9,52 +9,88 @@ excerpt_separator: <!--more-->
 This is Part 2. of my decision tree series. Here we will see how we can build a decision tree algorithmically using Leo Breiman's (One of the big, **big** names in decision trees) CART algorithm. 
 
 <!--more-->
+---
 
-# Steps in the CART decision tree inference algorithm
 
 ## Nomenclature
-For this article let's consider:  
+Ok, so there's going to be a little maths in this post, so for those who are not sure what all the notations mean let's go over them. (if you already know all this feel free to skip ahead :relaxed:)
+
+### Set notation
+Anything in between brackets ($\\{\\}$) is a set of objects (generally numbers). 
+ - $\\{1,3,4\\}$ is the set that is composed of $1$, $3$ and $4$.
+ - $\\{1,\cdots, 7\\}$ is the set of all integers between $1$ and $7$
+ - $i \in \\{1,3,4\\}$ means $i$ is equal to either $1$, $3$ or $4$ (it is read $i$ **in** $\\{1,3,4\\}$) 
+ - $i \notin \\{1,3,4\\}$ means $i$ is any number tht is not $1$, $3$ or $4$ (it is read $i$ **not in** $\\{1,3,4\\}$)
+ - $\\{x \leq 4,\ x\in\\{1,\cdots,6\\}\\}$ means the set of $x$ that less or equal to $4$ and $x$ in $\\{1,\cdots,6\\}$, *(here this means $x\in\\{1,2,3,4\\}$)*
+ - $A\subseteq B$ means that the set $A$ a subset of the set $B$ and it can be equal to $B$. For example $\\{1,2\\} \subseteq \\{1,\cdots,8\\}$ is **true** since $1$ and $2$ are included in the set of integers between $1$ and $8$, but $\\{1,2\\} \subseteq \\{2,\cdots,8\\}$ is **not true** since $1$ is not included in the set of integers between $2$ and $8$ *(we could say $\\{1,2\\}\nsubseteq \\{2,\cdots,8\\}$)*. 
+ - If we have a set $\mathcal{A}$ then $\overline{\mathcal{A}}$ is it's opposite set. So if $\mathcal{A}=\\{1,2,3\\}$ then $\overline{\mathcal{A}} = \\{x \notin \\{1,2,3\\}\\}$
+
+### Sums
+Sums are represented by the $\Sigma$ symbol *(read as "sigma")*. The value under the sigma is the start point, and tje value above is the end point of the sum. So :  
 
 $$
-Y \rightarrow target\\
-X_{\{1,\cdots,p\}} \rightarrow explanatory\ features
-$$  
+\sum^3_{i=1} i^2 = 1^2 + 2^2 + 3^2 = 14
+$$
 
-Meaning that the different $X_p$ are the variables in our dataset *(so if we take [part 1]({{site.baseurl}}{% link _posts/2019-02-26-what-are-decision-trees.markdown %})'s iris dataset they could be $petal\ length$ or $petal\ width$, $\cdots$)* and $Y_i$ is the target value for our example *(the species for our example)*  
+If you have any more questions about mathematical notation I would suggest you consult [this wikipedia page](https://en.wikipedia.org/wiki/List_of_mathematical_symbols) which is quite comprehensive.  
+
+### in this article
+
+ - $Y$ denotes the target variable *(in our [iris dataset]({{site.baseurl}}{% link _posts/2019-02-26-what-are-decision-trees.markdown %}) it would be the species)*
+ - $X_{\\{1,\cdots,p\\}}$ are the $p$ explanatory variables *(in the iris dataset: petal length and width, and sepal length and width, so $\ p=4$)*
+  
 For a classification tree $Y_i \in \{1,2,\cdots,k\}$, where $k$ is the number of possible classes.  
-On the other hand for a regression tree $Y_i \in \mathbb{R}$
+On the other hand for a regression tree $Y_i \in \mathbb{R}$ *(with $\mathbb{R}$  the set of real numbers)*  
+*(NB. in any post I might use "variable" and "feature" interchangeably because they essentially mean the same thing)*
+
+In decision trees nodes represent a split in data, in this post I will usually call splits $S$ and represent them as the 2 opposite sets $\mathcal{A}$ and $\overline{\mathcal{A}}$, where $\mathcal{A}$ is the set that goes to the left branch of the split and $\overline{\mathcal{A}}$ the set that goes to the right branch of the split. For example, the first split of [part 1]({{site.baseurl}}{% link _posts/2019-02-26-what-are-decision-trees.markdown %})'s simple tree, that has the condition $x_3 \leq 1.9$ will be noted as:  
+
+$$
+S = \{x_3 \leq 1.9\},\ \{x_3 > 1.9\}
+$$ 
 
 
+<br/>
+<br/>
+<br/>
 
-----
+Steps in the CART decision tree inference algorithm
+---------------------------------------------------
+## What is CART?
+CART stands for **C**lassification **A**nd **R**egression **T**rees, it is an algorithm developed by [Leo Breiman *et. al* in 1984](https://www.taylorfrancis.com/books/9781351460491) designed for inferring decision trees. It relies on evaluating possible splits at each node in our tree and choosing the best one. 
 
 ## splitting the data
-splitting on a feature. -> 2 different cases:
- - feature is numerical
- - feature is categorical
-(there is ordered categorical which is basically the same as a number so whatever)
+To infer a tree we need to choose the best possible split at each node, and to do that we need to know what those splits are. As we saw in [part 1]({{site.baseurl}}{% link _posts/2019-02-26-what-are-decision-trees.markdown %}) a split is only ever done on one feature  
+There are two types of features, hence two types of splits:
 
-### A. numerical splits
+ - **numerical features**: these have number values (usually continuous) with no fixed set of values. These values intrinsically have an order.
+ - **categorical features**: these are features that can take one value from a fixed set. For example a "blood type" feature could only have values from the set $\\{A,\ B,\ AB,\ O\\}$, or a "group number" feature could have values only in set $\\{1,\cdots,10\\}. It is important to know that categorical features can be numbers, they just have to by limited to a specific finite set of possible values. These values are unordered.
+
+*(NB. there can be ordered categorical values, like grades for example $A > B > C > D$ but they can be assimilated to numerical values which is why I didn't mention them in the list above)*
+
+
+#### A. numerical splits
 For a given node there are $n$ data points. Let us consider the numerical expalatory feature $X_{num}$. In this case we have a maximum number of splits $n-1$ corresponding to all the splits:  
 
-$$ S = \{ X_{num} \leq x_i\},\{X_{num} > x_i\}\quad i \in \{1,\cdots,n-1\}$$  
+$$ S = \{ X_{num} \leq x_i\},\{X_{num} > x_i\}\quad\quad i \in \{1,\cdots,n-1\}$$  
 
 We stop at $n-1$ because, for the maximum value of $X_{num}$ all points are smaller or equal to it, meaning we send all of our data points to one side of the split and leave the other side empty. This of course is not split, so we don't count that possibility. 
 
-### B. categorical splits
+#### B. categorical splits
 Let us consider now the categorical feature $X_{cat}$, which has $k$ possible levels. the possible number of splits is $2^{k-1} - 1$. A given split can be defined as:
 
-$$ S = \{X_{cat} \in \mathcal{A}\},\{X_{cat} \in \mathcal{\overline{A}}\}$$
+$$ 
+S = \{X_{cat} \in \mathcal{A}\},\{X_{cat} \in \mathcal{\overline{A}}\}\quad\quad \mathcal{A}\subseteq\{1,\cdots,k\}
+$$
 
-With $\mathcal{A}$ a subset of the possible levels, meaning:  $\mathcal{A} \subseteq \{1,\cdots,k\}$ , and $\mathcal{\overline{A}}$ it's opposite.
 
 
-_How many of these subsets are there?_  
-Let's consider first the case of a feature called $C$ with 3 levels:  
+_How many subsets $\mathcal{A}$ are there?_  
+Let's consider the case of a feature called $C$ with 3 levels:  
 
 $$C \in \{red,\ blue,\ green\}$$  
 
-To create a subset we must choose which values are in or not the subset. For example the subset $\mathcal{A} = \{red,\ green\}$ what we are saying is $red\in \mathcal{A}$ and $green\in \mathcal{A}$ and $blue\notin \mathcal{A}$. So each subset is a set of 3 values indicating presence or absence of a given level of $C$ in the subset. With this we can easily calculate the number of possible subsets.  
+To create a subset we must choose which values are in or not the subset. For example the subset $\mathcal{A} = \\{red,\ green\\}$ what we are saying is $red\in \mathcal{A}$ and $green\in \mathcal{A}$ and $blue\notin \mathcal{A}$. So each subset is a set of 3 values indicating presence or absence of a given level of $C$ in the subset. With this we can easily calculate the number of possible subsets.  
 For the first value (presence or absence of $red$ in the subset) there are $2$ possible options, for the second value we also have $2$ potentail values and the same for the third values.  
 So our total number of possible subsets is:  
 
@@ -75,7 +111,7 @@ S_1 = \{C\in\mathcal{A}\},\{C\in\mathcal{\overline{A}}\}\\
 S_2 = \{C\in\mathcal{\overline{A}}\},\{C\in\mathcal{A}\}\\
 $$
 
-It is easy to see that $S_1 = S_2$, that symmetry is why on out number of possible splits we have $2^{k-1}$ instead of simply $2^k$. The explanation for why it is $2^{k-1}-1$ and not $2^{k-1}$ is the same as for numerical features, because if $\mathcal{A}=\{red,\ blue,\ green\}$ then Our splits has all the points one one side and and empty set on the other, so it is not a split, so we remove that possibility and that's how we end up with $2^{k-1}-1$ .  
+It is easy to see that $S_1 = S_2$, that symmetry is why on out number of possible splits we have $2^{k-1}$ instead of simply $2^k$. The explanation for why it is $2^{k-1}-1$ and not $2^{k-1}$ is the same as for numerical features, because if $\mathcal{A}=\\{red,\ blue,\ green\\}$ then Our splits has all the points one one side and and empty set on the other, so it is not a split, so we remove that possibility and that's how we end up with $2^{k-1}-1$ .  
 
 So now we have all of the possible splits in our data, but how do we choose the best one?
 
@@ -119,7 +155,7 @@ $$
 <br/>  
 <br/>  
 
-To then choose the optimal split we choose the one that leads to the maximal decrease in impurity. So if we are in a node $t$ and a given split defines nodes $L$ and $R$ the ***left*** and ***right*** child nodes of $t$ respectively. We can define the decrease in impurity $\Delta i$ as:  
+To then choose the optimal split we choose the one that leads to the maximal decrease in impurity *(which can be either the Gini index or the entropy for classification trees or the RSS for regression trees)*. So if we are in a node $t$ and a given split defines nodes $L$ and $R$ the ***left*** and ***right*** child nodes of $t$ respectively. We can define the decrease in impurity $\Delta i$ as:  
 
 $$
 \Delta i = i(t) - p_L\cdot i(L) - p_R\cdot i(R)
@@ -163,9 +199,13 @@ function infer_tree(dataset) {
 
 }
 ````
-This is the simplest form of the algorithm, it results in a tree that grows until all leaves are pure (meaning that they contain examples of only one class), in most cases this is too stringent and can result in overfitting. To avoid this several strategies can be used:
+This is only a part of the algorithm, it results in a tree that grows until all leaves are pure (meaning that they contain examples of only one class), and the CART algorithm restricts that so we can have a more generalizable tree (no overfitting). 
 
-* you can define a minimum number of examples in each leaf, and if the dataset at a node is smaller or equal than that minimum then the node is not split and stays a leaf. 
+* you can define a minimum number of examples in each leaf, and if the dataset at a node is smaller or equal than that minimum then the node is not split and stays a leaf. (This is not typically used in CART) 
 * you can prune the tree and collapse leaves together, which we will see in a later part.
+
+## Conclusion
+
+I hop you learned something on how to build decision trees, and you can go read [part 3]() to see a `Python` implementation of this algorithm. 
 
 

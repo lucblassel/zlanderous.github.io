@@ -100,4 +100,4 @@ We can still evaluate the "goodness" of our tree, not by using missclassificatio
 
 ## conclusion
 OK so that was a quick introduction to decision trees, and my goal was to make you understand how a decision tree works, that it is just a set of nested partitions. Here we restricted ourselves to 2-D but it is easy to see how this carries to 3-D, we have a volume instead of a plane, and splits are surfaces instead of lines.  
-Stay tuned for [part 2]({{site.baseurl}}{%link _posts/2019-02-27-the-CART-algorithm.markdown%}) where I will go explain the CART algorithm for building these decision trees and implement it in `Python`.
+Stay tuned for [part 2]({{site.baseurl}}{%link _posts/2019-02-27-the-CART-algorithm.markdown%}) where I will go over the CART algorithm for building these decision trees.
