@@ -20,7 +20,7 @@ Y \rightarrow target\\
 X_{\{1,\cdots,p\}} \rightarrow explanatory\ features
 $$  
 
-Meaning that the different $X_p$ are the variables in our dataset *(so if we take [part 1]()'s iris dataset they could be $petal\ length$ or $petal\ width$, $\cdots$)* and $Y_i$ is the target value for our example *(the species for our example)*  
+Meaning that the different $X_p$ are the variables in our dataset *(so if we take [part 1](https://zlanderous.github.io/2019/02/26/what-are-decision-trees.html)'s iris dataset they could be $petal\ length$ or $petal\ width$, $\cdots$)* and $Y_i$ is the target value for our example *(the species for our example)*  
 For a classification tree $Y_i \in \{1,2,\cdots,k\}$, where $k$ is the number of possible classes.  
 On the other hand for a regression tree $Y_i \in \mathbb{R}$
 
@@ -166,6 +166,6 @@ function infer_tree(dataset) {
 This is the simplest form of the algorithm, it results in a tree that grows until all leaves are pure (meaning that they contain examples of only one class), in most cases this is too stringent and can result in overfitting. To avoid this several strategies can be used:
 
 * you can define a minimum number of examples in each leaf, and if the dataset at a node is smaller or equal than that minimum then the node is not split and stays a leaf. 
-* you can prune the tree and collapse leaves together.
+* you can prune the tree and collapse leaves together, which we will see in a later post.
 
 
