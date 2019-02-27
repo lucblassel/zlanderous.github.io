@@ -64,7 +64,7 @@ To infer a tree we need to choose the best possible split at each node, and to d
 There are two types of features, hence two types of splits:
 
  - **numerical features**: these have number values (usually continuous) with no fixed set of values. These values intrinsically have an order.
- - **categorical features**: these are features that can take one value from a fixed set. For example a "blood type" feature could only have values from the set $\\{A,\ B,\ AB,\ O\\}$, or a "group number" feature could have values only in set $\\{1,\cdots,10\\}. It is important to know that categorical features can be numbers, they just have to by limited to a specific finite set of possible values. These values are unordered.
+ - **categorical features**: these are features that can take one value from a fixed set. For example a "blood type" feature could only have values from the set $\\{A,\ B,\ AB,\ O\\}$, or a "group number" feature could have values only in set $\\{1,\cdots,10\\}$. It is important to know that categorical features can be numbers, they just have to by limited to a specific finite set of possible values. These values are unordered.
 
 *(NB. there can be ordered categorical values, like grades for example $A > B > C > D$ but they can be assimilated to numerical values which is why I didn't mention them in the list above)*
 
