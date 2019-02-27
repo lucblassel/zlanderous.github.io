@@ -14,7 +14,6 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Learning machines
-# email: luc.blassel@pasteur.fr
 description: >- # this means to ignore newlines until "baseurl:"
   understanding machine learning and how it works
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -23,7 +22,7 @@ repository: zlanderous/zlanderous.github.io
 
 linkedin_username: luc-blassel
 github_username:  zlanderous
-
+timezone: Europe/Paris
 show_excerpts: true
 
 disqus:
