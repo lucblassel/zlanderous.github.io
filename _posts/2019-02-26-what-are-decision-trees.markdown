@@ -27,11 +27,12 @@ So let's look at a small subset of our data:
 |        6.0        |        3.0       |        4.8        |        1.8       |  *virginica* |
 |        4.6        |        3.1       |        1.5        |        0.2       |   *setosa*   |
 
-A tree built on this subset (which we call the **training** or **learning** set), can look something like this:  
-{:refdef: style="text-align: center;"}
+A tree built *(more commonly we say trained instead of built)* on this subset (which we call the **training** or **learning** set), can look something like this:  
+<a id='simple-tree'> <a/>{:refdef: style="text-align: center;"} 
 ![a simple decision tree]({{site.baseurl}}/assets/images/simple_tree.svg)
 {:refdef}
-Where the data is split at each node according to a condition on a feature, for example: *is the petal length lower or equal to 1.7cm?*  
+Where the data is split in 2 at each node according to a condition on a feature, for example: *is the petal length lower or equal to 1.7cm?*.  
+*(NB. we restrict ourselves to binary decision trees, meaning a node only splits into 2 subnodes, there are decision trees that are non binary but they are not commonly used)*  
 This notion of splitting the data leads us quite well into our next section of seeing trees as partitions. 
 
 # Trees are partitions
@@ -56,7 +57,7 @@ Now we can draw our second split, the horizontal line representing $petal\ width
 {:refdef}  
 
 *Why don't we keep partitioning until there are no stragglers ?* you might ask.  
-To uderstand that let's take a look at what the tree would look like if we kept splitting the dataset until each subspace was only filled with one species:  
+To understand that let's take a look at what the tree would look like if we kept splitting the dataset until each subspace was only filled with one species:  
 
 {:refdef: style="text-align: center;"}
 ![an overfitted tree]({{site.baseurl}}/assets/images/overfitted_tree.svg)
@@ -64,7 +65,7 @@ To uderstand that let's take a look at what the tree would look like if we kept 
 As you can see this tree is a lot bigger and more complicated to take in, and it has splits that are very close to one another like $petal\ length = 4.9$ and $petal\ length = 4.8$ 
 
 {:refdef: style="text-align: center;"}
-![ovrfitted partitioning]({{site.baseurl}}/assets/images/iris_splits_overfit.svg)
+![overfitted partitioning]({{site.baseurl}}/assets/images/iris_splits_overfit.svg)
 {:refdef}  
 *(N.b, you might have noticed in middle-top partition there appears to be only a sample of virginica, so why was is separated from the middle-right partition which is also virginica? In reality, because of the low precision of the dataset measurements, there are 2 versicolor and 1 virginica that have the same values for petal length and width, making them indistinguishable in the plane)*  
 
@@ -72,6 +73,31 @@ The decision tree we have here is very specific to our present dataset, it split
 
 There are a couple ways to restrict the tree, either by specifying a maximum depth value *(how many splits in a row you can do)*, or a threshold value *(if a split has a species that makes up more than 90% of it's samples we can call it "pure" and stop splitting for examples)* or by **pruning** the tree, meaning we make a decision tree that is av precise as possible, very overfitted, and then, according to a set of rules, we remove the branches and nodes that are too specific.  
 
+# How do we kow if our tree is any good ?
+To be able to answer that question we need to know how we use a decision tree to make, well... decisions. First we need some examples that are not in the **training** set, so examples that have not been used to build the decision tree. And then we see how this examples travels through the tree and in which leaf it ends up. Let's take our [simple tree](#simple-tree) again, as well as the following data points:  
+
+|sample id| sepal length (x1) | sepal width (x2) | petal length (x3) | petal width (x4) | species      |
+|:-------:|:-----------------:|:----------------:|:-----------------:|:----------------:|--------------|
+|1        |        7.7        |        2.8       |        6.7        |        2.0       | *virginica*  |
+|2        |        6.1        |        3.0       |        4.6        |        1.4       | *versicolor* |
+|3        |        4.7        |        3.2       |        1.6        |        0.2       | *setosa*     |
+|4        |        7.2        |        3.0       |        5.8        |        1.6       | *virginica*  |  
+
+I've represented the decision paths (how the sample goes through the tree) of the first 3 samples with colors.  
+
+{:refdef: style="text-align: center;"}
+![decision paths in the simple tree]({{site.baseurl}}/assets/images/decision_paths.svg)
+{:refdef}  
+
+So for sample 2 *(the versicolor)* the petal length is $> 1.9$ so it goes right at the first node, the petal width is $\leq 1.7$ so it goes left at the second node and is correctly classified as *versicolor*. The same goes for samples 1 and 3. Let's take our fourth sample now, its petal length is $5.8$ which is $>1.9$ so it goes right at the first split, until now everything si OK, however its petal width is $1.6$ which is $\leq 1.7$, so it will go left at the second split and be detected as *versicolor* even though it is a *virginica*, so our tree made a mistake.  
+We can use these mistakes if our tree is representative of our data or not. To do this we separate a part of our dataset, before training our tree, into a **training** and a **testing** set (a classical split is to keep 20% of our data as testing data), after which we train our tree on the **training** set. To evaluate our model, we take all of the samples and run each of them through the tree and save the output *(ie. the predicted class)*. From this we can calculate the missclassification rate which is just the number of mistakes our tree makes divided by the total number of samples in the **testing** set.  
+Our tree making some small mistakes is inevitable (cases on a boundary between 2 classes can be a little tricky), and actually a good sign of a well generalized model. Indeed if you see missclassification rates $\approx 0$ it is a strong sign that your tree might be overfitting and that the testing data is very similar to the training data.  
+
+## A note on regression
+So far we have only seen how our tree can be used to classify data, meaning the leafs of our tree are classes. Each of our leaves have a subset of the training data (all the examples for which the decision paths end up at that leaf), and the leaf class corresponds to the majority class of the examples in it's subset.  
+For regression we don't want to predict discrete classes, but a continuous value *(for example the price of an apartment)*, and to do this we build the tree in the exact same way, by grouping similar values based on splits. A predicted value is then assigned to each leaf node, nd it is equal to the mean of all the target values of the examples in the leaf data subset.  
+We can still evaluate the "goodness" of our tree, not by using missclassification rate, but by using [$RMSE$](https://en.wikipedia.org/wiki/Root-mean-square_deviation) (Root Mean Square error) for example. 
+
 ## conclusion
-OK so that was a quick introduction to trees, and my goal was to make you understand how a decision tree works, that it is just a set of nested partitions. Here we restricted ourselves to 2-D but it is easy to see how this carries to 3-D, we have a volume instead of a plane, and splits are surfaces instead of lines.  
-Stay tuned for [part 2]({{site.baseurl}}{%link _posts/2019-02-27-the-CART-algorithm.markdown%}) where I will go explain the CART algorithm for building these decision tres and implement it in `Python`.
+OK so that was a quick introduction to decision trees, and my goal was to make you understand how a decision tree works, that it is just a set of nested partitions. Here we restricted ourselves to 2-D but it is easy to see how this carries to 3-D, we have a volume instead of a plane, and splits are surfaces instead of lines.  
+Stay tuned for [part 2]({{site.baseurl}}{%link _posts/2019-02-27-the-CART-algorithm.markdown%}) where I will go explain the CART algorithm for building these decision trees and implement it in `Python`.
