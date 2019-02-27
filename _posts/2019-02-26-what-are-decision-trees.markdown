@@ -3,12 +3,13 @@ layout: post
 mathjax: true
 title:  "What are decision trees?"
 date:   2019-02-26 12:53:20 +0100
+excerpt_separator: <!--more-->
 ---
 
 The first subject I want to tackle on this page is decision trees. What are they? How do they work? How can I make one?  
 I am planning to make a small series, rangin from explaining the concept, to implementing a decision tree inference algorithm and hopefully all the way up to implementing Random Forests.  
 All right let's get started.  
-
+<!--more-->
 
 # Example data
 We are going to use, as an example, the Fisher Iris dataset (more info [here](https://en.wikipedia.org/wiki/Iris_flower_data_set)) and we are going to build a tree that can separate the different types of irises (classes), which is called a classification tree. 
@@ -73,4 +74,4 @@ There are a couple ways to restrict the tree, either by specifying a maximum dep
 
 ## conclusion
 OK so that was a quick introduction to trees, and my goal was to make you understand how a decision tree works, that it is just a set of nested partitions. Here we restricted ourselves to 2-D but it is easy to see how this carries to 3-D, we have a volume instead of a plane, and splits are surfaces instead of lines.  
-Stay tuned for [part 2]() where I will go explain the CART algorithm for building these decision tres and implement it in `Python`.
+Stay tuned for [part 2]( {% post_url 2019-02-27-the-CART-algorithm.markdown %} ) where I will go explain the CART algorithm for building these decision tres and implement it in `Python`.
