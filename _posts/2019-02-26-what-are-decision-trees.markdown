@@ -7,6 +7,7 @@ excerpt_separator: <!--more-->
 # project: true
 tags: [decision-trees, machine-learning]
 comments: true
+feature: https://images.unsplash.com/photo-1546556874-fba2d7d6926e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=975&q=80
 ---
 
 

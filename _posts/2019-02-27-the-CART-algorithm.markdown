@@ -6,6 +6,7 @@ mathjax: true
 excerpt_separator: <!--more-->
 tags: [decision-trees, machine-learning]
 comments: true
+feature: https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80
 ---
 
 This is Part 2. of my decision tree series. Here we will see how we can build a decision tree algorithmically using Leo Breiman's (One of the big, **big** names in decision trees) CART algorithm. 
@@ -14,7 +15,7 @@ This is Part 2. of my decision tree series. Here we will see how we can build a 
 ---
 
 
-## Nomenclature
+## Maths (yay!)
 Ok, so there's going to be a little maths in this post, so for those who are not sure what all the notations mean let's go over them. (if you already know all this feel free to skip ahead 😄)
 
 ### Set notation
@@ -208,6 +209,6 @@ This is only a part of the algorithm, it results in a tree that grows until all 
 
 ## Conclusion
 
-I hop you learned something on how to build decision trees, stay tuned for [part 3]() to see a `Python` implementation of this algorithm. 
+I hop you learned something on how to build decision trees, stay tuned for [part 3]({{site.baseurl}}{% link _posts/2019-03-01-lets-implement-CART.markdown%}) to see a `Python` implementation of this algorithm. 
 
 
