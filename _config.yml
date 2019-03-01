@@ -13,7 +13,8 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Learning machines
+title: Luc Blassel
+bio: 'Getting to know machine learning'
 description: >- # this means to ignore newlines until "baseurl:"
   understanding machine learning and how it works
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -25,18 +26,28 @@ github_username:  zlanderous
 timezone: Europe/Paris
 show_excerpts: true
 
-disqus:
-  shortname: zlanderous-github-io
+mathjax: true
+# disqus:
+#   shortname: zlanderous-github-io
+
+disqus_shortname: zlanderous-github-io
 
 # Build settings
 markdown: kramdown
-theme: minima
+
+# theme: minima
+remote_theme: TaylanTatli/Moon
+logo: assets/images/logo_color.svg
 
 defaults:
   -
     values:
       author: Luc Blassel
 
+github-url:         zlanderous
+stackoverflow:      8650928/luc-blassel
+linkedin:           luc-blassel
+instagram:          zlanderous
 
 # theme_color: red
 plugins:
