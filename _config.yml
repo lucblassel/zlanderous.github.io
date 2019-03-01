@@ -18,7 +18,7 @@ bio: 'Getting to know machine learning'
 description: >- # this means to ignore newlines until "baseurl:"
   understanding machine learning and how it works
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://zlanderous.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://lucblassel.com" # the base hostname & protocol for your site, e.g. http://example.com
 repository: zlanderous/zlanderous.github.io
 
 linkedin_username: luc-blassel
