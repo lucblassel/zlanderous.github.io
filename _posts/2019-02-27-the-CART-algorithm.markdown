@@ -209,5 +209,5 @@ This is only a part of the algorithm, it results in a tree that grows until all 
 
 ## Conclusion
 
-I hop you learned something on how to build decision trees, stay tuned for [part 3]() to see a `Python` implementation of this algorithm. 
+I hope you learned something on how to build decision trees, and go check out [part 3]({{site.baseurl}}{%link _posts/2019-03-02-lets-implement-CART.markdown%}) to see a `Python` implementation of this algorithm. 
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Let's implement the CART Algorithm
-date: 2019-03-01 10:00:00 {{site.timezone}}
+date: 2019-03-02 10:00:00 {{site.timezone}}
 mathjax: true
 excerpt_separator: <!--more-->
 tags: [decision-trees, machine-learning, Python, code]
@@ -331,5 +331,5 @@ That's it, thats the whole dataset, but you see here we have a nice mix of categ
 
 Yay everything works!  
 
-You might have noticed that we only have classification trees in this example, and you'd be right. I haven't implemented the regression part yet because I'm too lazy but it would be exactly the same, but you would need to add an RSS function that you could plug in the `get_delta_i()` method and in the `split()` method, when a leaf node is reached set the prediction value to the mean of the dataset outcomes instead of the most frequent one. So I'll put it in eventually but I won't make a separate post on that. All of the code will go on my [github](github.com/zlanderous) so you san play with it if you want.  
+You might have noticed that we only have classification trees in this example, and you'd be right. I haven't implemented the regression part yet because I'm too lazy but it would be exactly the same, but you would need to add an RSS function that you could plug in the `get_delta_i()` method and in the `split()` method, when a leaf node is reached set the prediction value to the mean of the dataset outcomes instead of the most frequent one. So I'll put it in eventually but I won't make a separate post on that. All of the code is on my [github](https://github.com/zlanderous/CART-python) so you can play with it if you want.  
 One last thing, we haven't implemented the full CART algorithm because there is no pruning method to avoid overfitting, but this will come in a future part, so stay tuned!.   
