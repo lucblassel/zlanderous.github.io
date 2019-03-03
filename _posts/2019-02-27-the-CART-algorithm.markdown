@@ -25,7 +25,7 @@ Anything in between brackets $$\{\}$$ is a set of objects (generally numbers).
  - $$i \in \{1,3,4\}$$ means $$i$$ is equal to either $$1$$, $$3$$ or $$4$$ (it is read $$i$$ **in** $$\{1,3,4\}$$) 
  - $$i \notin \{1,3,4\}$$ means $$i$$ is any number tht is not $$1$$, $$3$$ or $$4$$ (it is read $$i$$ **not in** $$\{1,3,4\}$$)
  - $$\{x \leq 4,\ x\in\{1,\cdots,6\}\}$$ means the set of $$x$$ that less or equal to $$4$$ and $$x$$ in $$\{1,\cdots,6\}$$, *(here this means $$x\in\{1,2,3,4\}$$)*
- - $$A\subseteq B$$ means that the set $$A$$ a subset of the set $$B$$ and it can be equal to $$B$$. For example $$\{1,2\} \subseteq \{1,\cdots,8\}$$ is **true** since $$1$$ and $$2$$ are included in the set of integers between $$1$$ and $$8$$, but $$\{1,2\} \subseteq \{2,\cdots,8\}$$ is **not true** since $$1$$ is not included in the set of integers between $$2$$ and $$8$$ *(we could say $$\{1,2\}\nsubseteq \{2,\cdots,8\}$$)*. 
+ - $$A\subset B$$ means that the set $$A$$ a subset of the set $$B$$ and it cannot be equal to $$B$$. For example $$\{1,2\} \subset \{1,\cdots,8\}$$ is **true** since $$1$$ and $$2$$ are included in the set of integers between $$1$$ and $$8$$, but $$\{1,2\} \subset \{2,\cdots,8\}$$ is **not true** since $$1$$ is not included in the set of integers between $$2$$ and $$8$$ *(we could say $$\{1,2\}\not\subset \{2,\cdots,8\}$$)*. 
  - If we have a set $$\mathcal{A}$$ then $$\overline{\mathcal{A}}$$ is it's opposite set. So if $$\mathcal{A}=\{1,2,3\}$$ then $$\overline{\mathcal{A}} = \{x \notin \{1,2,3\}\}$$
 
 ### Sums
@@ -80,10 +80,11 @@ $$ S = \{ X_{num} \leq x_i\},\{X_{num} > x_i\}\quad\quad i \in \{1,\cdots,n-1\}$
 We stop at $$n-1$$ because, for the maximum value of $$X_{num}$$ all points are smaller or equal to it, meaning we send all of our data points to one side of the split and leave the other side empty. This of course is not split, so we don't count that possibility. 
 
 #### B. categorical splits
-Let us consider now the categorical feature $$X_{cat}$$, which has $$k$$ possible levels. the possible number of splits is $$2^{k-1} - 1$$. A given split can be defined as:
+Let us consider now the categorical feature $$X_{cat}$$, which has $$k$$ possible levels. the possible number of splits is $$2^{k-1} - 1$$. A given split can be defined as:  
+<a id='categorical-splits-definition'> <a/>
 
 $$ 
-S = \{X_{cat} \in \mathcal{A}\},\{X_{cat} \in \mathcal{\overline{A}}\}\quad\quad \mathcal{A}\subseteq\{1,\cdots,k\}
+S = \{X_{cat} \in \mathcal{A}\},\{X_{cat} \in \mathcal{\overline{A}}\}\quad\quad \mathcal{A}\subset\{1,\cdots,k\}
 $$
 
 
@@ -114,7 +115,7 @@ S_1 = \{C\in\mathcal{A}\},\{C\in\mathcal{\overline{A}}\}\\
 S_2 = \{C\in\mathcal{\overline{A}}\},\{C\in\mathcal{A}\}\\
 $$
 
-It is easy to see that $$S_1 = S_2$$, that symmetry is why on out number of possible splits we have $$2^{k-1}$$ instead of simply $$2^k$$. The explanation for why it is $$2^{k-1}-1$$ and not $$2^{k-1}$$ is the same as for numerical features, because if $$\mathcal{A}=\{red,\ blue,\ green\}$$ then Our splits has all the points one one side and and empty set on the other, so it is not a split, so we remove that possibility and that's how we end up with $$2^{k-1}-1$$ .  
+It is easy to see that $$S_1 = S_2$$, that symmetry is why on out number of possible splits we have $$2^{k-1}$$ instead of simply $$2^k$$. The explanation for why it is $$2^{k-1}-1$$ and not $$2^{k-1}$$ is the same as for numerical features, because if $$\mathcal{A}=\{red,\ blue,\ green\}$$ then Our splits has all the points one one side and and empty set on the other, so it is not a split, so we remove that possibility and that's how we end up with $$2^{k-1}-1$$ *(thats also why we used $$ \mathcal{A} \subset \{1,\cdots,k\}$$ instead of $$\mathcal{A} \subseteq \{1,\cdots,k\}$$ when we [defined our categorical splits](#categorical-splits-definition)).*   
 
 So now we have all of the possible splits in our data, but how do we choose the best one?
 
