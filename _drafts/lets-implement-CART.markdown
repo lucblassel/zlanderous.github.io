@@ -74,8 +74,7 @@ Ok, so we can just concentrate ourselves on the `Node` class. So if you remember
 from pandas.api.types import is_categorical, is_string_dtype, is_bool
 
 def check_categorical(data):
-    truth = is_categorical(data) | is_string_dtype(data) | is_bool(data)
-    return truth
+    return is_categorical(data) | is_string_dtype(data) | is_bool(data)
 ~~~
 
 So now that we can distinguish the two we can write this function that gets all possible splits in our dataset, and returns them as a dictionnary
@@ -162,3 +161,175 @@ def get_best_split(self):
     return max(delta_is, key=delta_is.get)
 ~~~
 
+# Building the tree
+Ok so now for the fun part, we are going to build the tree recursively. To do that we choose the best split at our root node, and then apply the split function on each of these subtrees, and in turn each of the splits in these split will also be splited... And this needs to keep happening until some conditions are met: the stop condition.  
+So when do we want to stop splitting the data at a given node? Well the simplest answer would be to stop when the node is pure (or when there are no more possible splits), so it contains data points of only one class. However since, as we said in previous parts, we want to avoid overfitting we will also add some other stop conditions:
+- Stop splitting when the leaf has under a certain amount of data points
+- Stop splitting when the tree gets a certain depth.
+
+To implement these two stopping options we need to add more parameters to our `Node` class, so let's modify ou `__init__` method:
+~~~python  
+def __init__(self, data, target, min_samples_leaf=10, max_depth=3, level=0):
+    self.data = data # Dataframe with features and target
+    self.target = target # name of target
+    self.min_samples_leaf = min_samples_leaf
+    self.max_depth = max_depth
+    self.level = level
+    self.left = None
+    self.right = None
+    self.prediction = None
+~~~
+
+Ok so here I have just added parameters to determine when we want our tree to stop splitting, as well as a `level` value that is just going to allow us to keep track of the depth of a given node in the tree. Ok so now we have these parameters we need to implement methods that allow us to check if any of the stopping conditions are met:
+
+~~~python
+    def is_pure(self):
+        return len(self.data[self.outcome].unique()) == 1
+
+    def too_small(self):
+        len(self.data) <= self.min_samples_leaf
+
+    def too_deep(self):
+        return self.level >= self.max_depth
+
+    def no_splits(self):
+        return self.get_splits() == {}
+~~~
+
+So if any of these methods return true we will stop splitting. Ok so now we have defined our stop condition we can write up our recursive splitting method:
+
+~~~python
+def split(self):
+
+    if self.is_pure() or self.too_deep() or self.no_splits() or self.too_small():  # stop condition
+        # we set the prediction value of this terminal node
+        self.prediction = self.data[self.outcome].value_counts().idxmax()
+        return
+
+    # find best split
+    best_split = self.get_best_split()
+
+    # get split info
+    self.split_feature = best_split[0]
+    self.split_value = best_split[1]
+    self.split_type = best_split[2]
+
+    # get the actual right and left subsets to pass on to child nodes
+    if self.split_type == 'categorical':
+        left_data = self.data[
+            self.data[self.split_feature] == self.split_value]
+        right_data = self.data[
+            self.data[self.split_feature] != self.split_value]
+
+    elif self.split_type == 'numerical':
+        left_data = self.data[
+            self.data[self.split_feature] <= self.split_value
+        ]
+        right_data = self.data[
+            self.data[self.split_feature] > self.split_value
+        ]
+    else:
+        raise ValueError(
+            'splits can be either numerical or categorical'
+            )
+
+    # get parameters to pass on to child nodes
+    child_params = {
+        'outcome': self.outcome,
+        'parent_node': self,
+        'min_samples_leaf': self.min_samples_leaf,
+        'max_depth': self.max_depth,
+        'level': self.level +1
+    }
+
+    # create child nodes and point to them from this node
+    self.left = Tree(left_data, **child_params)
+    self.right = Tree(right_data, **child_params)
+    
+    # split child nodes
+    self.left.split()
+    self.right.split()
+
+    return
+~~~
+
+Ok so it might seem like a long function but it is actually quite simple, We just keep splitting the data with the best possible split (maximizing $$\Delta i$$), and if one of our stop conditions is met we get the prediction that this node will make: the most frequent class in the node.  
+
+All right we're done with the important bits, let's test our programm out, and see what kind of trees we get, to be able to see what tree we have I blatently ripped off [this stackOverflow answer](https://stackoverflow.com/a/54074933/8650928) which gives us super nice trees! And I added a `value` property for my nodes where I put a string describing the split if the node is a split node, and the predicted class if the node is a leaf node.  
+and if we try out our code with the iris data we get:  
+~~~python
+>>>from sklearn.datasets import load_iris
+
+>>>iris = load_iris()
+>>>iris_df = pd.DataFrame(iris['data'], columns=iris['feature_names'])
+>>>iris_df['species'] = iris['target']
+>>>iris_df['species'] = iris_df['species'].apply(lambda i: iris['target_names'][i])
+
+>>>tree_iris = Tree(iris_df, 'species', max_depth=3)
+>>>tree_iris.split()
+>>>tree_iris.display()
+
+     ____petal length (cm) <= 1.9________________________                        
+    /                                                    \                       
+ (setosa)                               ______petal width (cm) <= 1.7______      
+                                       /                                   \     
+                                  (versicolor)                        (virginica)
+~~~
+Hey that tree looks super familiar, yay it's the exact same one than the in previous parts, our method worked! how about if we want a deeper tree?  
+~~~python
+>>>tree_iris = Tree(iris_df, 'species', max_depth=4)
+>>>tree_iris.split()
+>>>tree_iris.display()
+
+     ____petal length (cm) <= 1.9____________________________________________________________                                                            
+    /                                                                                        \                                                           
+ (setosa)                                                  _______________________petal width (cm) <= 1.7________________________                        
+                                                          /                                                                      \                       
+                                        ______petal length (cm) <= 4.9______                                    _____petal length (cm) <= 4.8______      
+                                       /                                    \                                  /                                   \     
+                                  (versicolor)                         (virginica)                        (virginica)                         (virginica)
+~~~
+
+We get a tree that's one level deeper. So everything seems to be working fine. However in our iris dataset we only have numerical data, legnths and widths, so we don't really know if our tree building nethod works with categorical data. So to do this I'm going ot use the golfing dataset which has a certain number of features, and the target value is if a game of golf is played or not. This dataset is very small so I can show you all of it here:  
+
+| id | outlook  | temperature | humidity | windy | play |
+|----|----------|-------------|----------|-------|------|
+| 1  | sunny    | 85          | 85       | FALSE | no   |
+| 2  | sunny    | 80          | 90       | TRUE  | no   |
+| 3  | overcast | 83          | 86       | FALSE | yes  |
+| 4  | rainy    | 70          | 96       | FALSE | yes  |
+| 5  | rainy    | 68          | 80       | FALSE | yes  |
+| 6  | rainy    | 65          | 70       | TRUE  | no   |
+| 7  | overcast | 64          | 65       | TRUE  | yes  |
+| 8  | sunny    | 72          | 95       | FALSE | no   |
+| 9  | sunny    | 69          | 70       | FALSE | yes  |
+| 10 | rainy    | 75          | 80       | FALSE | yes  |
+| 11 | sunny    | 75          | 70       | TRUE  | yes  |
+| 12 | overcast | 72          | 90       | TRUE  | yes  |
+| 13 | overcast | 81          | 75       | FALSE | yes  |
+| 14 | rainy    | 71          | 91       | TRUE  | no   |
+
+
+That's it, thats the whole dataset, but you see here we have a nice mix of categorical and numerical data. Ok so let's see how our CART implementation handles this:
+
+~~~python
+>>>import pandas as pd
+>>>data_mixed = pd.read_csv('data_mixed.csv', header=0, index_col=0)
+
+>>>tree = Tree(data_mixed, 'play', max_depth=4)
+>>>tree.split()
+>>>tree.display()
+
+    __outlook = overcast___________________________________                                   
+   /                                                       \                                  
+ (yes)                                ______________humidity <= 80______________              
+                                     /                                          \             
+                           __temperature <= 65___                     __temperature <= 70__   
+                          /                      \                   /                     \  
+                         (no)                  (yes)               (yes)                  (no)
+~~~
+
+Yay everything works!  
+
+You might have noticed that we only have classification trees in this example, and you'd be right. I haven't implemented the regression part yet because I'm too lazy but it would be exactly the same, but you would need to add an RSS function that you could plug in the `get_delta_i()` method and in the `split()` method, when a leaf node is reached set the prediction value to the mean of the dataset outcomes instead of the most frequent one. So I'll put it in eventually but I won't make a separate post on that. All of the code will go on my [github](github.com/zlanderous) so you san play with it if you want.  
+One last thing, we haven't implemented the full CART algorithm because there is no pruning method to avoid overfitting, but this will come in a future part, so stay tuned!.   
