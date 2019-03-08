@@ -45,6 +45,9 @@ defaults:
     values:
       author: Luc Blassel
 
+google:
+  analytics: UA-135923392-1
+
 github-url:         zlanderous
 stackoverflow:      8650928/luc-blassel
 linkedin:           luc-blassel
