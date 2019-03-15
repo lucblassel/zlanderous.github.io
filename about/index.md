@@ -7,40 +7,46 @@ comments: false
 feature: assets/images/me.jpg
 ---
 
+# Who am I ?
+
 My name is Luc Blassel, I'm currently working as a bio-informatician at the Pasteur Institute in Paris. I'm quite intereseted in everything machine learning, so I made this site to try and explain some methods in depth, and hopefully re-implement them. I hope this is useful to some of you!  
 Cheers
 
+## Professional experience
+*April 2018-Now:* **Research engineer** at Pasteur institute , Paris, France.  
+Drug resistance mutation detection in HIV genomic sequences using machine learning techniques, within Olivier Gascuel’s [evolutionary bioinformatics lab](https://research.pasteur.fr/en/team/evolutionary-bioinformatics/). Usage of Python and high performance computing cluster (SLURM). Article is being written.
+
+*March-August 2017:* **Data scientist intern** at CapitalData, Paris, France.  
+Developed data validation methods using machine-learning with R and Golang, Automated statistical
+tests with Python, internal and client-oriented reporting and data-visualization with MySQL, BIME, periscope and Mode. Internal communication with LATEX
+
+*2016-now:* **Tutoring** , self-employed , Paris, France.  
+teaching Maths, physics, chemistry, biology and English at high school level
 
 
-----
-# My CV
-
-Education
----------
-
-2018-2019
-:   **Master's, Machine learning and data mining**; Paris Dauphine University (Paris, France)
-
-    *This si a research oriented program in machine learning.(More info [here](https://mido.dauphine.fr/fr/formations-et-diplomes/masters-2/master-2-informatique/parcours-isi/presentation.html))*
-
-2014-2018
-:   **French ingénieur in life sciences degree**; AgroParisTech (Paris, France)
-
-    *[AgroParisTech](http://www2.agroparistech.fr/Presentation-of-AgroParisTech.html) is a french "Grande école" in life sciences. during my 3rd year there I specialized in machine learning and data mining in the [IODAA program](http://www2.agroparistech.fr/ufr-info/iodaa/)*
-
-Experience
-----------
-2018-present
-:   **Research engineer**; Institut Pasteur (Paris, France)
-
-My work here is focused on applying machine learning techniques to the detection of Drug resistance mutations in HIV genetic sequences. Most scripts developed were written in `Python` with `scikit-learn`.
+## Education
 
 
-2017
-:   **Data scientist intern**; CapitalData (Paris, France)
+*2018-2019:* **Masters of Science** , Paris Dauphine University , Paris, France.  
+Computer science : [Intelligent systems (ISI) program](https://mido.dauphine.fr/fr/formations-et-diplomes/masters-2/master-2-informatique/parcours-isi/presentation.html). Data science, data mining and Machine learning curriculum.
 
-I was tasked with setting up a anomaly detection system, based on predictive models. This was developed in R mostly with the `caret` library.)
+*2014-2018:* **Engineering degree** , [Agroparistech](http://www2.agroparistech.fr/Presentation-of-AgroParisTech.html) , Paris, France.  
+[3rd year specialization : Data science, Machine learning and Data mining.](http://www2.agroparistech.fr/ufr-info/iodaa/)
+2nd year specialization : Human health, including projects developed in Java and C as well as a simulation project in Matlab
 
+*May 2014:* **Agronomy-veterinary studies entrance examination** , Paris, France.
+Admission on the first try, ranked top 15% at agronomy exam, top 10% at veterinary exam
+
+
+*2011 and 2013* **Preparatory class** , Lycée Étienne Geoffroy St-Hilaire , Paris, France.  
+Advanced curriculum in Biology, Chemistry and Physics
+
+
+## Languages
+- **English**: native language
+- **French**: native language
+- **Chinese**: Intermediate Level *(language programs, 1 month in Beijing, 5 months in Shanghai at SISU)*
+- **German**: Goethe Institute level B1 *(language program at the Goëthe institut in Schwäbisch Hall)*
 
 ----
 ### About this site
