@@ -6,6 +6,7 @@ comments: true
 date:   2019-03-18 19:00:00 {{site.timezone}}
 feature: https://images.unsplash.com/photo-1515630278258-407f66498911?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1374&q=80
 author: luc blassel
+excerpt_separator: <!--more-->
 ---
 
 # Introduction
@@ -19,6 +20,8 @@ reproduce their method that consists in building neural networks whose
 structure is learned and optimized at the same time as it’s weights.This
 method will be applied to a binary classification task on images from
 the [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) dataset.
+
+<!--more-->
 
 # How does Adanet work?
 
