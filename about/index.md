@@ -38,7 +38,7 @@ Computer science : [Intelligent systems (ISI) program](https://mido.dauphine.fr/
 Admission on the first try, ranked top 15% at agronomy exam, top 10% at veterinary exam
 
 
-*2011 and 2013* **Preparatory class** , Lycée Étienne Geoffroy St-Hilaire , Paris, France.  
+*2011 and 2013* **[Preparatory class](https://en.wikipedia.org/wiki/Classe_pr%C3%A9paratoire_aux_grandes_%C3%A9coles)** , Lycée Étienne Geoffroy St-Hilaire , Paris, France.  
 Advanced curriculum in Biology, Chemistry and Physics
 
 
