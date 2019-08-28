@@ -8,13 +8,13 @@ comments: true
 # feature: https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80
 ---
 
-Ok so as we saw in previous parts, the CART algorithm allows us to build decision trees. Up till now we have built these trees until all leaves are pure, meaning they have only one class of examples (for classification trees), however this can lead to over-fitting the training data which decreases the generalizability of our model, and therefore it's usefulness. This is where cost-complexity pruning comes into play.
+Ok so as we saw in previous parts, the CART algorithm allows us to build decision trees. Up till now we have built these trees until all leaves are pure, meaning they have only one class of examples (for classification trees), however this can lead to overfitting the training data which decreases the generalizability of our model, and therefore it's usefulness. This is where cost-complexity pruning comes into play.
 
 <!--more-->
 
 # What is pruning?
 So [pruning](https://en.wikipedia.org/wiki/Pruning) comes from biology, pruning a plant is selectively removing some part of it. In the case of decision trees, it just means removing some branches. However even though we remove branches we want to keep all of our samples, so we cant just eliminate part of the samples from branches, so effectively removing a branch corresponds to choosing a pruning node, where we want our branch to end, and collapsing all it's child nodes into it.  
-Now how do we choose which branches to remove ? if we remove too many our model looses any classifying, or regressing power it has and if we remove too few we can still have over-fitting. This is addressed by cost-complexity pruning, which balances the complexity of the tree *(the number of leaves, so potential over-fitting)* with the performance of the tree. 
+Now how do we choose which branches to remove ? if we remove too many our model looses any classifying, or regressing power it has and if we remove too few we can still have overfitting. This is addressed by cost-complexity pruning, which balances the complexity of the tree *(the number of leaves, so potential overfitting)* with the performance of the tree. 
 
 # Notation
 In order to explain cost-complexity pruning, we are going to need to give some names to things we need, luckily that's already been done. 
@@ -43,4 +43,4 @@ Which is to say the sum of the resubstitution error of a leaf node multiplied by
 
 # The pruning
 
-The first step in pruning a tree is, ..., you guessed it: having a tree. So we start by growing $$T_{max}$$ the maximal tree, with pure leaves. Now the naive approach would be to go through all the possible pruned subtrees and see which one has the best trade-off between performance and complexity, however that is, in practice, impossible because of the huge number of pruned subtrees that 
+The first step in pruning a tree is, ..., you guessed it: having a tree. So we start by growing $$T_{max}$$ the maximal tree, with pure leaves. Now the naive approach would be to go through all the possible pruned subtrees and see which one has the best trade-off between performance and complexity, however that is, in practice, impossible because of the huge number of possible pruned subtrees. 
