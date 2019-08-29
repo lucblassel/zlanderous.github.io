@@ -19,7 +19,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   understanding machine learning and how it works
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://lucblassel.com" # the base hostname & protocol for your site, e.g. http://example.com
-repository: zlanderous/zlanderous.github.io
+repository: lucblassel/zlanderous.github.io
 
 linkedin_username: luc-blassel
 github_username:  lucblassel
@@ -27,9 +27,6 @@ timezone: Europe/Paris
 show_excerpts: true
 
 mathjax: true
-# disqus:
-#   shortname: zlanderous-github-io
-
 disqus_shortname: zlanderous-github-io
 
 # Build settings
@@ -48,7 +45,7 @@ defaults:
 google:
   analytics: UA-135923392-1
 
-github-url:         zlanderous
+github-url:         lucblassel
 stackoverflow:      8650928/luc-blassel
 linkedin:           luc-blassel
 instagram:          zlanderous
