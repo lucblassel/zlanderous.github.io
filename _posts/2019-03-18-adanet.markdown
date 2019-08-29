@@ -307,4 +307,4 @@ a pre-trained network this method might yield results more quickly than
 when using convolutional neural networks, and could be interesting.
 
 ## code 
-All the code can be found in [this repository](https://github.com/zlanderous/adanet)
+All the code can be found in [this repository](https://github.com/lucblassel/adanet)
