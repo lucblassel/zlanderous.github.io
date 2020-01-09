@@ -75,8 +75,34 @@ Here we can see that the cost is minimal when $\theta=2$ which is what we want. 
 For those that have done some algebra before, you'll know everything about derivatives and gradients, for the others I'll do a very quick recap. The derivative of a function $f(x)$ with regards to $x$, $\frac{df}{\delta x}$, describes the rate of change of $f$. So when $\frac{df}{\delta x}$ is positive, it means $f$ is growing when $x$ grows and when $\frac{df}{\delta x}$ is negative, $f$ is decreasing when $x$ grows.  
 If you have a function that depends on several variables, like $g(x_1, x_2)$ we can compute several partial derivatives, each with regards to one of the variables of our function. In our case these partial derivatives would be: $\frac{\delta g}{\delta x_1}$ and $\frac{\delta g}{\delta x_2}$. The gradient is simply a vector containing all the partial derivatives of our function.  
 
-If we compute the gradient of our cost function $C$ with regards to the different $\theta$ coefficients, we can tell how we need to adjust a particular $\theta$ value to lower the cost.  
-For example, let's assume we have our gradient for $C$ composed of all the $\frac{\delta C}{\delta \theta_j}$. Let's imagine then that $\frac{\delta C}{\delta \theta_1} > 0$, this means that our cost is increasing with $\theta_1$, meaning that if we want to decrease $C$ we must also decrease $\theta_1$ by a certain amount. By doing this for all the $\theta_j$ we can decrease $C$ and if we repeat this step a large enough number of times we can converge to the minimal value of $C$. We know that when we reach the minimum of $C$, then the gradient value should all be equal to 0.  
+If we compute the gradient of our cost function $C$ with regards to the different $\theta$ coefficients, we can tell how we need to adjust a particular $\theta$ value to lower the cost. Let's work out the partial derivative $\frac{\delta C}{\delta\theta_k}$ for a given $k$ *(This might be a little math intensive so if you're not interested you can just skip to the end of the derivation)*   
+$$
+\begin{aligned}
+    \frac{\delta C}{\delta\theta_k} &= \frac{\delta}{\delta\theta_k}(\frac{1}{2m}\sum_{i=1}^m(\hat{y}^{(i)} - y^{(i)})^2)\\
+    &= \frac{1}{2m}\sum_{i=1}^m\frac{\delta}{\delta\theta_k}(\hat{y}^{(i)} - y^{(i)})^2\\
+    &= \frac{1}{2m}\sum_{i=1}^m\frac{\delta}{\delta\theta_k}(\hat{y}^{(i)} - y^{(i)})\cdot2\cdot(\hat{y}^{(i)} - y^{(i)})\\
+    &= \frac{1}{m}\sum_{i=1}^m\frac{\delta}{\delta\theta_k}(\hat{y}^{(i)} - y^{(i)})\cdot(\hat{y}^{(i)} - y^{(i)})
+\end{aligned}
+$$
+
+We can then work out $\frac{\delta}{\delta\theta_k}(\hat{y}^{(i)} - y^{(i)})$:  
+
+$$
+\begin{aligned}
+    \frac{\delta}{\delta\theta_k}(\hat{y}^{(i)} - y^{(i)}) &= \frac{\delta}{\delta\theta_k}(\sum_{j=0}^n\theta_jx^{(i)}_j - y^{(i)})\\
+    &= \frac{\delta}{\delta\theta_k}(\theta_kx^{(i)}_k + \sum_{j\neq k}\theta_jx^{(i)}_j - y^{(i)})\\
+    &= \frac{\delta}{\delta\theta_k}(\theta_kx^{(i)}_k) = x^{(i)}_k
+\end{aligned}
+$$
+
+So finally we can have our partial derivative:
+
+$$
+\frac{\delta C}{\delta\theta_k} = \frac{1}{m}\sum_{i=1}^m(\hat{y}^{(i)} - y^{(i)})\cdot x^{(i)}_k
+$$
+
+#### How do we use the gradient ?
+Let's assume we have our gradient for $C$ composed of all the $\frac{\delta C}{\delta \theta_j}$. Let's imagine then that $\frac{\delta C}{\delta \theta_1} > 0$, this means that our cost is increasing with $\theta_1$, meaning that if we want to decrease $C$ we must also decrease $\theta_1$ by a certain amount. By doing this for all the $\theta_j$ we can decrease $C$ and if we repeat this step a large enough number of times we can converge to the minimal value of $C$. We know that when we reach the minimum of $C$, then the gradient value should all be equal to 0.  
 
 If we try to summarize the steps that we will have to implement for linear regression we have:  
  1. compute the cost $C$ with all the $\theta_j$ values
@@ -101,7 +127,178 @@ $$
 \hat{y}^{(i)} = \theta_0 + \sum_{j=1}^{n}\theta_j\cdot x^{(i)}_j
 $$
 
-if we add a feature to 
+if we add a feature $x_0 = 1$ to our input vector, our prediction becomes:
+
+$$
+\hat{y}^{(i)} = \sum_{j=0}^{n}\theta_j\cdot x^{(i)}_j
+$$
+
+So now we have our input vector $x^{(i)}$ of dimension $1\times n+1$ and our coefficient vector $\Theta$ of dimension $n+1\times1$, so computing $\hat{y}^{(i)}$ can be done with a single vector multiplication, and computing the prediction vector $\hat{y}$ containing all predictions can be done in a single matrix multiplication.
+
+$$
+\begin{aligned}
+    \hat{y}^{(i)} &= x^{(i)}\cdot\Theta\\
+    \hat{y} &= X\cdot\Theta
+\end{aligned}
+$$
+We can therefore write our cost as follows, where $X^{\circ2}$ means we apply the square function to each element of the matrix $X$ separately:  
+
+$$
+\begin{aligned}
+    C &= \frac{1}{2m}\sum_{i=1}^m(\hat{y}^{(i)} - y^{(i)})^2\\
+    &= \frac{1}{2m}\sum_{i=1}^m(x^{(i)}\cdot\Theta - y^{(i)})^2\\
+    &= \frac{1}{2m}\sum((X\cdot\Theta - y)^{\circ2})
+\end{aligned}
+$$
+
+We can also write the gradient $\nabla C$ in matrix math form:
+
+<!-- $$
+\begin{align*}
+    \nabla C &= \begin{vmatrix}
+        \frac{\delta C}{\delta\theta_0}\\\
+        \frac{\delta C}{\delta\theta_1}\\\
+        \vdots \\\
+        \frac{\delta C}{\delta\theta_n}\\\
+    \end{vmatrix}\\\
+    \frac{\delta C}{\delta\theta_k} &= \frac{1}{m}\sum_{i=1}^m(\hat{y}^{(i)} - y^{(i)})\cdot x^{(i)}_k \\\
+    &= \frac{1}{m}x_k^T\cdot(X\cdot\Theta - y)\\\
+    \\\
+    \nabla C &= \frac{1}{m}X^T\cdot(X\cdot\Theta - y)
+\end{align*}
+$$ -->
+
+$$
+\begin{align*}
+    A = B\\ 
+    C = D
+\end{align*}\\
+
+not\ aligned
+$$
+
+This matrix form will allow us to write the code more clearly once we get to that, and the computations will be much more efficient with matrix math than writing loops for the sums.  
+Ok so I guess we can start getting into the implementation part of this post. I'll do this in Python but any other programming language with decent matrix math library will do the trick.
 
 # How can we implement linear regression ?
 
+### Getting a dataset
+Ok so first things first we need some data on which to train our linear regressor, I'm going to stick to basics an use the [boston housing dataset](link_here), where we try to guess the median monetary value of different homes depending on several features like number of rooms, crime rate, distance to nearest job center, etc...  
+This dataset is available in the `scikit-learn` library in Python and we are going to split it into a training dataset with $80\%$ of the examples and keep the remaining $20\%$ as a testing set on which we can evaluate the performance of our linear regressor. I wrote a small dataset splitting function, and loaded the data.
+
+~~~python
+import numpy as np
+from sklearn.datasets import load_boston
+
+def split_dataset(X, y, train_frac=0.8):
+    index = np.random.choice(len(y), int(len(y) * train_frac))
+    X_train, y_train = X[index], y[index]
+    X_test, y_test = np.delete(X, index, 0), np.delete(y, index, 0)
+    return X_train, y_train, X_test, y_test
+
+X, y = load_boston(return_X_y=True)
+X_train, y_train, X_test, y_test = split_dataset(X, y)
+~~~  
+ Our dataset looks like this:  
+ ````
+       CRIM    ZN  INDUS  CHAS    NOX     RM   AGE     DIS  RAD    TAX  PTRATIO       B  LSTAT
+0  0.00632  18.0   2.31   0.0  0.538  6.575  65.2  4.0900  1.0  296.0     15.3  396.90   4.98
+1  0.02731   0.0   7.07   0.0  0.469  6.421  78.9  4.9671  2.0  242.0     17.8  396.90   9.14
+2  0.02729   0.0   7.07   0.0  0.469  7.185  61.1  4.9671  2.0  242.0     17.8  392.83   4.03
+3  0.03237   0.0   2.18   0.0  0.458  6.998  45.8  6.0622  3.0  222.0     18.7  394.63   2.94
+4  0.06905   0.0   2.18   0.0  0.458  7.147  54.2  6.0622  3.0  222.0     18.7  396.90   5.33
+````
+The next step we need to do is normalize the features, because as we can see above they are not at all in the same scale, for example `CRIM` is a lot smaller than `TAX` for example so in our cost function `TAX` will have a much larger impact than `CRIM`. To mitigate that we bring all the features to the same scale by subtracting the mean and then dividing by the standard deviation.  
+
+$$
+x_j^{normalized} = \frac{x_j - \mu(x_j)}{\sigma(x_j)}
+$$
+
+The effect of normalization on the value distribution of each feature is shown after. On the left the features are not normalized and all other features are dwarfed by the `TAX` and `B` features, whereas on the right, after normalizing all the features have roughly the same scale and therefore the same impact on cost.
+
+![feature normalization effect]({{site.baseurl}}/assets/images/linear_regression/feature_normalization.svg)
+
+We compute the $\mu$ and $\sigma$ values for each feature only on the training set and use these values to normalize the testing set as well. I wrote a little function to help us do that:  
+
+~~~python
+def normalize(X, mu=None, sigma=None):
+    if mu is None or sigma is None:
+        mu, sigma = X.mean(axis=0), X.std(axis=0)
+    return ((X - mu) / sigma), mu, sigma
+
+# feature normalize
+X_train_norm, mu, sigma = normalize(X_train)
+X_test_norm, _, _ = normalize(X_test, mu, sigma)
+~~~
+
+Before we can get to training our regressor we still need the bias feature $x_0$ to our $X$ matrix. To do that we just add a column full of ones to the beginning of $X$:
+
+~~~python
+# add bias feature
+X_train_norm = np.append(
+  np.ones((len(X_train_norm), 1)), X_train_norm, axis=1)
+X_test_norm = np.append(
+  np.ones((len(X_test_norm), 1)), X_test_norm, axis=1)
+~~~
+
+### Building our regressor
+Now we can get to the actual regression part. First we need to be able to compute our cost, note that in Python the matrix multiplication symbol is `@`, and th `**2` means we square the matrix element-wise.
+
+~~~python
+def compute_cost(theta, X, y):
+    return sum((X @ theta - y) ** 2) / (2 * len(y))
+~~~
+
+In the same fashion we can also compute the gradient:  
+
+~~~python
+def compute_gradient(theta, X, y):
+    return (X.T @ (X @ theta - y)) / len(y)
+~~~
+
+And that's basically it, we have all the elements needed for our gradient descent. To keep it simple I'm going to end the gradient descent after a set number of iterations `max_iters` but you could as well add a stopping condition if the cost doesn't change. The way we do this is at each iteration we update the $\theta$ coefficients by subtracting the gradient from the $\Theta$ vector weighted by the learning rate $\alpha$. To have an idea of what the linear regression is doing during training we keep the list of costs in the `history` list to be able to plot the learning curve, this curve can be quite useful to check that our regressor is behaving as expected and that we have the correct learning rate. 
+
+~~~python
+def gradient_descent(X, y, theta, alpha, max_iters):
+    history = []
+    for _ in range(max_iters):
+        theta = theta - alpha * compute_gradient(theta, X, y)
+        history.append(compute_cost(theta, X, y))
+    return theta, history
+~~~
+
+### How do we choose the learning rate ?
+
+Here I am just going to try a couple different $\alpha$ values and check the learning curves for each of these alpha values. With small values, like $\alpha=0.001$ you can see that the cost decreases so we are converging but it takes a very long time, but as $alpha$ gets bigger the cost decreases faster and faster.  
+
+![learning rate effect]({{site.baseurl}}/assets/images/linear_regression/learning_rate.svg)
+
+But we have to be careful, if we choose an $\alpha$ value that's too big it the cost can end up growing instead of decreasing and we do not find the optimal value for $\Theta$:  
+
+![learning rate too big]({{site.baseurl}}/assets/images/linear_regression/learning_rate_too_big.svg)
+
+So after looking at these graphs we can choose the right value $\alpha = 0.1$ which will give us the fastest convergence time. 
+
+### training our regressor
+
+So now we can actually train our linear regression and then measure it's performance on our test data set. First we need initial $\theta$ values, so we are just going to set them all equal to zero. 
+
+~~~python
+# Initializing Theta vector
+theta_init = np.zeros((len(X_train_norm[0]),))
+# learning optimal Theta vector
+theta_learned, cost_history = gradient_descent(
+    X_train_norm, y_train, theta_init, 0.1, 1000)
+~~~
+
+Now that we have our $\Theta$ vector we can use it to make predictions on the normalized test set. We can then check how well our model performs by plotting the predicted values `y_pred` against the real values `y_test`. 
+
+~~~python
+# To get y^ predicted values
+def predict(X, theta):
+    return X @ theta
+
+y_pred = predict(X_test_norm, theta_learned)
+~~~
+
+![regression plot](/assets/images/linear_regression/regression_plot.svg)
