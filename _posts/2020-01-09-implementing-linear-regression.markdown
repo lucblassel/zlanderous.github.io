@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Implementing linear regression ?
+title: Implementing linear regression, math and Python!
 mathjax: true
+date:   2020-01-09 10:00:00 {{site.timezone}}
 excerpt_separator: <!--more-->
 tags: [linear model, machine-learning, Python, code, regression]
 comments: true
