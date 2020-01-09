@@ -23,3 +23,11 @@ $$
     this &= that
 \end{align*}
 $$
+
+ProcessEnvironnments: true  
+
+\begin{align*}
+    A &= B\\
+    this &= that
+\end{align*}
+
