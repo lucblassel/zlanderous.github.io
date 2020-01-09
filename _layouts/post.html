@@ -42,7 +42,11 @@ layout: compress
     </header>
     {% include scripts.html %}
     {% if page.mathjax == true %}
-        {% include mathjax.html %}
+        {% if page.align == true %}
+            {% include mathjax_align.html %}
+        {% else %}
+            {% include mathjax.html %}
+        {% endif %}
     {% endif %}
 </body>
 </html>
