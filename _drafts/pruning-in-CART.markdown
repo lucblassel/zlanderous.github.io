@@ -44,3 +44,5 @@ Which is to say the sum of the resubstitution error of a leaf node multiplied by
 # The pruning
 
 The first step in pruning a tree is, ..., you guessed it: having a tree. So we start by growing $$T_{max}$$ the maximal tree, with pure leaves. Now the naive approach would be to go through all the possible pruned subtrees and see which one has the best trade-off between performance and complexity, however that is, in practice, impossible because of the huge number of possible pruned subtrees. 
+
+This is a test of how the git thing works 

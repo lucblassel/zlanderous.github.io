@@ -20,6 +20,7 @@ Cheers
 
 <br/>
 
+![Another CV](https://github.com/lucblassel/resume/blob/master/cv_english.pdf)
 ----
 ### About this site
 
