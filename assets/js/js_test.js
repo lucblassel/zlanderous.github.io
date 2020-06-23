@@ -1,5 +1,6 @@
-
 var DataFrame = dfjs.DataFrame
+console.log('this is a test');
+
 
 let filename = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
 
@@ -23,9 +24,12 @@ var COLORS = ["#4ec086",
 "#c5863b"]
 
 DataFrame.fromCSV(filename)
+    .then(console.log('read file'))
     .then(makeChart);
 
 function makeChart(dataframe) {
+
+  console.log('inside makeChart');
 
   var joined = formatData(dataframe);
   var datasets = getPlotData(joined, COUNTRIES);
@@ -66,6 +70,7 @@ function makeChart(dataframe) {
 }
 
 function formatData(dataframe) {
+  console.log('inside formatData');
   var cols = dataframe.listColumns();
 
   for (i=0; i<4; i++) {
@@ -97,6 +102,7 @@ function formatData(dataframe) {
 }
 
 function getPlotData(joined, countries) {
+  console.log('inside getPlotData');
   var datasets = [];
   for (country of countries) {
     row = joined.filter({'Country': country});
